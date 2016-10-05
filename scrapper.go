@@ -27,23 +27,19 @@ func searchScrape() {
         log.Fatal(err)
     }
     doc.Find("section .product-list .row .product-detail-wrapper").Each(func(index int, item *goquery.Selection) {
-
          title := item.Find(".product-title").Text()
          titlebersih := strings.TrimSpace(title)
          hargaNormal := strings.TrimSpace(item.Find(".product-price .old-price .old-price-text").Text())
          hargaDiskon := strings.TrimSpace(item.Find(".product-price .new-price .new-price-text").Text())
+         link := item.Find("a")
+         urlProduct, _ := link.Attr("href")
          //mappping string
-         slcD := map[string]string{"title": titlebersih, "harga_normal": hargaNormal, "harga_diskon": hargaDiskon}
+         slcD := map[string]string{"url":urlProduct, "title": titlebersih, "harga_normal": hargaNormal, "harga_diskon": hargaDiskon}
          slcB, _ := json.Marshal(slcD)
 
          fmt.Println(string(slcB))
-         //fmt.Printf("Model - '%s' Harga Normal '%s' - Harga Diskon '%s' \n ", titlebersih, hargaNormal, hargaDiskon)
     })
-
-
 }
-
-
 
 func main(){
     searchScrape()
